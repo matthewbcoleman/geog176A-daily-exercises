@@ -33,5 +33,5 @@ g <- ggplot(data = covid_pivot_region, aes (x = date, y = value, color = region)
 
 g
 
-ggsave('/Users/matthewcoleman/Documents/GitHub/matthewbcoleman.github.io/img/coviddeathcase.jpg', g)
+ggsave('img/coviddeathcase.jpg', g)
 
