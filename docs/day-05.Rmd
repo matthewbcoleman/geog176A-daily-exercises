@@ -1,6 +1,6 @@
 ---
 title: "Daily Exercise 05"
-author: "Mike Johnson"
+author: "Matthew Coleman"
 output: html_document
 ---
 
@@ -20,7 +20,7 @@ For this lab we will use the historic, county level data which is stored as an u
 
 
 ```{r, eval = FALSE}
-https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv
+https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv 
 ```
 
 ### Start
@@ -52,7 +52,8 @@ Use `dplyr` verbs to tell create a data.frame of the **5** counties with the mos
 (**Hint:** `filter`, `arrange`)
 
 ```{r}
-
+top_5_county_case <- covid %>% filter(date==max(date)) %>% top_n(5,cases) %>% arrange(-cases)
+top_5_county_case
 ```
 
 ## Question 2: 
@@ -62,7 +63,8 @@ Use `dplyr` verbs to tell create a data.frame of the **5** states with the _most
 (**Hint:** `filter`, `group_by`, `summarize`, `arrange`)
 
 ```{r}
-
+top_5_state_case <- covid %>% filter(date==max(date)) %>% group_by(state) %>% summarize(num_cases=sum(cases)) %>% ungroup() %>%  top_n(5,num_cases) %>% arrange(-num_cases)
+top_5_state_case
 ```
 
 ## Question 3: 
@@ -72,7 +74,9 @@ Use the `dplyr` verbs to report the  **5** counties with the _worst_ current dea
 (**Hint:** `filter`, `mutate`, `arrange`, `slice`)
 
 ```{r}
-
+#Filtering out places with infinite death ratios because it ~should~ be impossible to 0 cases and any deaths
+top_5_ratio <- covid %>% filter(date==max(date)) %>% mutate(death_ratio= ((deaths/cases)*100)) %>% filter(death_ratio!=Inf) %>% top_n(5,death_ratio) %>% arrange(-death_ratio)
+top_5_ratio
 ```
 
 
@@ -83,7 +87,9 @@ USe the `dplyr` verbs to report the **5** states with the worst current deaths/c
 (**Hint:** `filter`, `group_by`, `summarize`, `mutate`, `arrange`)
 
 ```{r}
-
+top_5_state_ratio <- covid %>% filter(date==max(date)) %>% group_by(state) %>% summarize(deaths= sum(deaths), cases = sum(cases)) %>% ungroup() %>%
+  mutate(death_ratio = (deaths/cases)*100)  %>% top_n(5, death_ratio) %>% arrange(-death_ratio)
+top_5_state_ratio
 ```
 
 
